@@ -1,7 +1,9 @@
+import AuthButton from "@/components/AuthButton";
 import "@/styles/globals.css";
 
 import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   title: "Create T3 App",
@@ -9,12 +11,23 @@ export const metadata: Metadata = {
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${GeistSans.variable}`}>
-      <body>{children}</body>
+      <body className="dark">
+        <header className="bg-primary-500 fixed top-0 flex w-full items-center justify-between p-4">
+          <p className="text-2xl font-medium text-neutral-400">
+            Mount<span className="text-neutral-100">Chat</span>™
+          </p>
+          <AuthButton />
+        </header>
+        <main className="flex min-h-screen flex-col p-12">
+          {children}
+          <Toaster position="top-right" />
+        </main>
+      </body>
     </html>
   );
 }
