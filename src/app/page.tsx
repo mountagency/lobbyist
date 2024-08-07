@@ -18,7 +18,7 @@ export default async function HomePage() {
         Lobbyist<span className="font-medium text-neutral-500">™</span>
       </h1>
       <div className="flex justify-between gap-7">
-        <AuthButton className="shadow-[0_5px_25px_-5px] shadow-foreground/40" />
+        <AuthButton className="bg-indigo-500 text-foreground shadow-[0_5px_25px_-5px] shadow-indigo-400/60" />
       </div>
     </div>
   );

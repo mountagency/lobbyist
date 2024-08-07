@@ -4,6 +4,8 @@ import { redirect } from "next/navigation";
 import { Button } from "./ui/button";
 import Image from "next/image";
 import { EllipsisVertical, LogOut } from "lucide-react";
+import { cn } from "@/lib/utils";
+import DiscordIcon from "./Icons/DiscordIcon";
 
 type Props = {
   className?: string;
@@ -68,7 +70,12 @@ export default async function AuthButton({ className }: Props) {
     </div>
   ) : (
     <form action={signIn}>
-      <Button className={className}>Login with Discord</Button>
+      <Button className={cn(className, "flex items-center gap-2")}>
+        <p>
+          Sign in with <strong>Discord</strong>
+        </p>
+        <DiscordIcon className="size-6" />
+      </Button>
     </form>
   );
 }
