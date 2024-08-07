@@ -1,6 +1,5 @@
 import AuthButton from "@/components/AuthButton";
 import RoomForm from "@/components/Room/RoomForm";
-import { encodeUsername } from "@/lib/utils";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 
