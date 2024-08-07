@@ -19,7 +19,7 @@ export default async function ChatMessages({
   return (
     <Suspense fallback={"loading..."}>
       <ChatList roomId={roomId} userId={userId} />
-      <InitMessages messages={data || []} />
+      <InitMessages messages={data ?? []} />
     </Suspense>
   );
 }

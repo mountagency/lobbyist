@@ -1,6 +1,6 @@
 "use client";
 
-import { Room, useRoom } from "@/lib/store/roomStore";
+import { type Room, useRoom } from "@/lib/store/roomStore";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";

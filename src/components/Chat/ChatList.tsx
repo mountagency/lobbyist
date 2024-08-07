@@ -34,22 +34,25 @@ export default function ChatList({
           filter: `room_id=eq.${roomId}`,
         },
         async (payload) => {
-          if (!optimisticIds.includes(payload.new.id)) {
-            const { error, data } = await supabase
-              .from("users")
-              .select("*")
-              .eq("id", payload.new.user_id)
-              .single();
-            if (error) {
-              toast.error(error.message);
-            } else {
-              const newMessage = {
-                ...payload.new,
-                users: data,
-              };
-              addMessage(newMessage as Message);
+          void (async () => {
+            if (!optimisticIds.includes(payload.new.id as string)) {
+              const { error, data } = await supabase
+                .from("users")
+                .select("*")
+                .eq("id", payload.new.user_id)
+                .single();
+              if (error) {
+                toast.error(error.message);
+              } else {
+                const newMessage = {
+                  ...payload.new,
+                  users: data,
+                };
+                addMessage(newMessage as Message);
+              }
             }
-          }
+          });
+
           const scrollContainer = scrollRef.current;
           if (
             scrollContainer.scrollTop <

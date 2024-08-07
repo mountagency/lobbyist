@@ -27,7 +27,7 @@ export default async function RoomPage({
     .eq("name", params.roomName)
     .single();
 
-  if (error || !room) {
+  if (error ?? !room) {
     notFound();
   }
 
@@ -39,7 +39,7 @@ export default async function RoomPage({
     .eq("room_id", room.id)
     .single();
 
-  if (userRoomError || !userRoom) {
+  if (userRoomError ?? !userRoom) {
     // Redirect to a page explaining they need to join the room first
     redirect(`/join-room/${room.id}`);
   }

@@ -2,13 +2,14 @@
 
 import { useState } from "react";
 import { useUser } from "@/lib/store/userStore";
-import { Room, useRoom } from "@/lib/store/roomStore";
+import { type Room, useRoom } from "@/lib/store/roomStore";
 import { Input } from "../ui/input";
 import { createClient } from "@/utils/supabase/client";
 import { Button } from "../ui/button";
 import { toast } from "sonner";
 import bcrypt from "bcryptjs";
 import { useRouter } from "next/navigation";
+import { type PostgrestError } from "@supabase/supabase-js";
 
 type CreateRoomResult = {
   room: Room | null;
@@ -38,7 +39,7 @@ export default function RoomForm() {
       .eq("name", roomName)
       .single();
 
-    if (roomError || !room) {
+    if (roomError ?? !room) {
       toast.error("Room not found");
       return;
     }
@@ -115,7 +116,7 @@ export default function RoomForm() {
       room_name: roomName,
       password_hash: hashedPassword,
       user_id: user.id,
-    })) as { data: CreateRoomResult | null; error: any };
+    })) as { data: CreateRoomResult | null; error: PostgrestError };
 
     if (error) {
       toast.error(error.message);

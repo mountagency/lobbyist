@@ -34,9 +34,9 @@ export default function ChatInput({
         created_at: new Date().toISOString(),
         users: {
           id: user?.id,
-          avatar_url: user?.user_metadata.avatar_url,
+          avatar_url: user?.user_metadata.avatar_url as string,
           created_at: new Date().toISOString(),
-          display_name: user?.user_metadata.user_name,
+          display_name: user?.user_metadata.user_name as string,
         },
       };
       addMessage(newMessage as Message);

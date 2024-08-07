@@ -1,6 +1,8 @@
 import SideBar from "@/components/Navigation/SideBar";
 import "@/styles/globals.css";
+import { createClient } from "@/utils/supabase/server";
 import { type Metadata } from "next";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Lobbyist™ Dashboard",
@@ -11,6 +13,16 @@ export const metadata: Metadata = {
 export default async function DashboardLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const supabase = createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect("/");
+  }
+
   return (
     <section className="flex">
       <SideBar />

@@ -42,8 +42,8 @@ export default async function AuthButton() {
       <div className="ml-2 flex items-center gap-4">
         <div className="size-6 overflow-hidden rounded-full">
           <Image
-            src={data.user.user_metadata.avatar_url}
-            alt={`User image: ${data.user.user_metadata.full_name}`}
+            src={data.user.user_metadata.avatar_url as string}
+            alt={`User image: ${data.user.user_metadata.full_name as string}`}
             width={128}
             height={128}
           />

@@ -3,7 +3,7 @@
 
 import { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
-import { Room } from "@/lib/store/roomStore";
+import { type Room } from "@/lib/store/roomStore";
 import { useUser } from "@/lib/store/userStore";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
@@ -38,8 +38,8 @@ export default function RoomPresence({ room }: { room: Room }) {
         await channel.track({
           online_at: new Date().toISOString(),
           user_id: user?.id,
-          name: user?.user_metadata.full_name,
-          avatar_url: user?.user_metadata.avatar_url,
+          name: user?.user_metadata.full_name as string,
+          avatar_url: user?.user_metadata.avatar_url as string,
         });
       });
 
@@ -64,8 +64,8 @@ export default function RoomPresence({ room }: { room: Room }) {
             )}
           >
             <Image
-              src={user?.avatar_url!}
-              alt={`Message by user ${user?.name}`}
+              src={user.avatar_url}
+              alt={`Message by user ${user.name}`}
               width={128}
               height={128}
             />

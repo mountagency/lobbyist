@@ -34,7 +34,7 @@ export default function RoomForm({
       .eq("id", roomId)
       .single();
 
-    if (roomError || !room) {
+    if (roomError ?? !room) {
       toast.error("Room not found");
       return;
     }

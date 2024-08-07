@@ -29,20 +29,24 @@ export const ChatMessage = ({ message, position, userId }: Props) => {
         position === "first" || position === "single" ? "pt-3" : "",
       )}
     >
-      <div className="flex items-center gap-3 self-end">
-        <div className="size-6 overflow-hidden rounded-full">
-          <Image
-            src={message.users?.avatar_url!}
-            alt={`Message by user ${message.users?.display_name}`}
-            width={128}
-            height={128}
-            className={cn(
-              position === "last" || position === "single" ? "block" : "hidden",
-              isOwnMessage && "hidden",
-            )}
-          />
+      {message.users && (
+        <div className="flex items-center gap-3 self-end">
+          <div className="size-6 overflow-hidden rounded-full">
+            <Image
+              src={message.users.avatar_url}
+              alt={`Message by user ${message.users?.display_name}`}
+              width={128}
+              height={128}
+              className={cn(
+                position === "last" || position === "single"
+                  ? "block"
+                  : "hidden",
+                isOwnMessage && "hidden",
+              )}
+            />
+          </div>
         </div>
-      </div>
+      )}
       <div className={cn("flex w-full items-center justify-between gap-3")}>
         <div
           className={cn(

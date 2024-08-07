@@ -22,7 +22,7 @@ export default async function RoomPage({
     .eq("id", params.roomId)
     .single();
 
-  if (error || !room) {
+  if (error ?? !room) {
     notFound();
   }
 
