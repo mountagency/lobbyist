@@ -5,13 +5,16 @@ import { ChatMessage } from "./ChatMessage";
 import { Message, useMessage } from "@/lib/store/messageStore";
 import { createClient } from "@/utils/supabase/client";
 import { toast } from "sonner";
-import { cn } from "@/lib/utils";
-import { useUser } from "@/lib/store/userStore";
 
-export default function ListMessages() {
+export default function ChatList({
+  roomId,
+  userId,
+}: {
+  roomId: string;
+  userId: string;
+}) {
   const supabase = createClient();
   const { messages, addMessage, optimisticIds } = useMessage((state) => state);
-  const { user } = useUser((state) => state);
 
   useEffect(() => {
     const channel = supabase
@@ -22,6 +25,7 @@ export default function ListMessages() {
           event: "INSERT",
           schema: "public",
           table: "message",
+          filter: `room_id=eq.${roomId}`,
         },
         async (payload) => {
           if (!optimisticIds.includes(payload.new.id)) {
@@ -47,12 +51,12 @@ export default function ListMessages() {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [messages]);
+  }, [messages, roomId]);
 
   return (
     <div className="no-scrollbar flex h-full flex-1 flex-col overflow-y-auto">
       <div className="flex-1"></div>
-      <div className="mt-20 space-y-1">
+      <div className="mt-12 space-y-1">
         {messages.map((message, index) => {
           const isSameUserAsPrevious =
             index > 0 && messages[index - 1]?.user_id === message.user_id;
@@ -67,9 +71,16 @@ export default function ListMessages() {
             position = "middle";
           } else if (isSameUserAsPrevious && !isSameUserAsNext) {
             position = "last";
+          } else {
+            position = "single";
           }
           return (
-            <ChatMessage message={message} key={index} position={position} />
+            <ChatMessage
+              message={message}
+              key={index}
+              position={position}
+              userId={userId}
+            />
           );
         })}
       </div>

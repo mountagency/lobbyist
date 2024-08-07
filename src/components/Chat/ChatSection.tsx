@@ -1,18 +1,28 @@
 import React from "react";
-import ChatHeader from "./ChatHeader";
 import ChatInput from "./ChatInput";
-import { User } from "@supabase/supabase-js";
-import ListMessages from "./ListMessages";
 import ChatMessages from "./ChatMessages";
+import { Room } from "@/lib/store/roomStore";
 
-export default async function ChatSection() {
+export default async function ChatSection({
+  room,
+  userId,
+}: {
+  room: Room;
+  userId: string;
+}) {
   return (
-    <div className="flex h-[calc(100vh-9rem)] flex-1 flex-col overflow-hidden rounded-3xl border border-neutral-700 bg-neutral-900 md:w-[500px]">
-      <div className="relative flex h-full flex-col overflow-y-scroll px-4">
-        <ChatHeader />
-        <ChatMessages />
+    <div className="flex h-[calc(100vh-1.5rem)] w-[28rem] flex-col gap-2">
+      <div className="flex rounded-lg border border-border bg-card px-3 py-2 text-xl font-medium">
+        {room.name}
       </div>
-      <ChatInput />
+      <div className="relative flex flex-1 flex-col overflow-hidden rounded-lg border border-border bg-card">
+        <div className="top-gradient absolute left-0 top-0 h-16 w-full"></div>
+
+        <div className="flex flex-1 flex-col overflow-y-scroll px-3">
+          <ChatMessages roomId={room.id} userId={userId} />
+        </div>
+        <ChatInput roomId={room.id} userId={userId} />
+      </div>
     </div>
   );
 }

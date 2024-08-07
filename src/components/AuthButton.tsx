@@ -1,7 +1,9 @@
-import { useUser } from "@/lib/store/user";
 import { createClient } from "@/utils/supabase/server";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { Button } from "./ui/button";
+import Image from "next/image";
+import { EllipsisVertical, LogOut } from "lucide-react";
 
 export default async function AuthButton() {
   const supabase = createClient();
@@ -36,21 +38,34 @@ export default async function AuthButton() {
   };
 
   return data?.user ? (
-    <div className="flex items-center gap-4">
-      <span className="text-neutral-500">
-        {data.user.user_metadata.full_name}
-      </span>
-      <form action={signOut}>
-        <button className="rounded-md bg-neutral-900 px-3 py-2.5 leading-[.9] no-underline hover:bg-neutral-800">
-          Logout
-        </button>
-      </form>
+    <div className="flex items-center justify-between gap-4">
+      <div className="ml-2 flex items-center gap-4">
+        <div className="size-6 overflow-hidden rounded-full">
+          <Image
+            src={data.user.user_metadata.avatar_url}
+            alt={`User image: ${data.user.user_metadata.full_name}`}
+            width={128}
+            height={128}
+          />
+        </div>
+        <span className="text-sm text-neutral-500">
+          {data.user.user_metadata.full_name}
+        </span>
+      </div>
+      <div className="flex">
+        <form action={signOut}>
+          <Button variant={"ghost"} className="h-auto p-2.5">
+            <LogOut size={14} />
+          </Button>
+        </form>
+        <Button variant={"ghost"} className="h-auto p-2.5">
+          <EllipsisVertical size={14} />
+        </Button>
+      </div>
     </div>
   ) : (
     <form action={signIn}>
-      <button className="rounded-md bg-neutral-900 px-3 py-2.5 leading-[.9] no-underline hover:bg-neutral-800">
-        Login
-      </button>
+      <Button>Login</Button>
     </form>
   );
 }

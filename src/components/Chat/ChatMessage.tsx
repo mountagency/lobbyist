@@ -7,12 +7,11 @@ type Props = {
   message: Message;
   className?: string;
   position: string;
+  userId: string;
 };
 
-export const ChatMessage = ({ message, className, position }: Props) => {
+export const ChatMessage = ({ message, position, userId }: Props) => {
   if (!message) return null;
-
-  const user = useUser((state) => state.user);
 
   const parsedDate = new Date(message.created_at);
   const formattedDate = new Intl.DateTimeFormat("en-US", {
@@ -21,11 +20,13 @@ export const ChatMessage = ({ message, className, position }: Props) => {
     timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
   }).format(parsedDate);
 
+  const isOwnMessage = message.user_id === userId;
+
   return (
     <div
       className={cn(
         "group flex items-center gap-3",
-        position === "first" && "pt-2",
+        position === "first" || position === "single" ? "pt-3" : "",
       )}
     >
       <div className="flex items-center gap-3 self-end">
@@ -36,8 +37,8 @@ export const ChatMessage = ({ message, className, position }: Props) => {
             width={128}
             height={128}
             className={cn(
-              position === "last" || position === "" ? "block" : "hidden",
-              message.user_id === user?.id && "hidden",
+              position === "last" || position === "single" ? "block" : "hidden",
+              isOwnMessage && "hidden",
             )}
           />
         </div>
@@ -45,32 +46,26 @@ export const ChatMessage = ({ message, className, position }: Props) => {
       <div className={cn("flex w-full items-center justify-between gap-3")}>
         <div
           className={cn(
-            "w-auto max-w-[calc(90%-4rem)] rounded-2xl px-2.5 py-2",
-            message.user_id === user?.id
-              ? "ml-auto self-end bg-indigo-500"
-              : "bg-neutral-700",
-            message.user_id === user?.id && position === "first"
+            "w-auto max-w-[calc(100%-3rem)] rounded-2xl px-2.5 py-2",
+            isOwnMessage ? "ml-auto self-end bg-indigo-500" : "bg-neutral-700",
+            isOwnMessage && position === "first"
               ? "rounded-br"
-              : message.user_id === user?.id && position === "middle"
+              : isOwnMessage && position === "middle"
                 ? "rounded-r"
-                : message.user_id === user?.id &&
-                  position === "last" &&
-                  "rounded-tr",
+                : isOwnMessage && position === "last" && "rounded-tr",
 
-            message.user_id !== user?.id && position === "first"
+            !isOwnMessage && position === "first"
               ? "rounded-bl"
-              : message.user_id !== user?.id && position === "middle"
+              : !isOwnMessage && position === "middle"
                 ? "rounded-l"
-                : message.user_id !== user?.id &&
-                  position === "last" &&
-                  "rounded-tl",
+                : !isOwnMessage && position === "last" && "rounded-tl",
           )}
         >
           <p>{message.content}</p>
         </div>
-        <span className="hidden text-[.65rem] leading-none opacity-40 group-hover:block">
+        {/* <span className="hidden text-[.65rem] leading-none opacity-40 group-hover:block">
           {formattedDate}
-        </span>
+        </span> */}
       </div>
     </div>
   );
