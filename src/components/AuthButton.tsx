@@ -5,7 +5,10 @@ import { Button } from "./ui/button";
 import Image from "next/image";
 import { EllipsisVertical, LogOut } from "lucide-react";
 
-export default async function AuthButton() {
+type Props = {
+  className?: string;
+};
+export default async function AuthButton({ className }: Props) {
   const supabase = createClient();
   const { data } = await supabase.auth.getUser();
 
@@ -65,7 +68,7 @@ export default async function AuthButton() {
     </div>
   ) : (
     <form action={signIn}>
-      <Button>Login</Button>
+      <Button className={className}>Login with Discord</Button>
     </form>
   );
 }

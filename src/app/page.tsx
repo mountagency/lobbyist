@@ -1,5 +1,4 @@
 import AuthButton from "@/components/AuthButton";
-import RoomForm from "@/components/Room/RoomForm";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 
@@ -14,11 +13,13 @@ export default async function HomePage() {
   }
 
   return (
-    <>
-      <div className="mt-12 flex justify-between gap-7 px-12">
-        <AuthButton />
-        <RoomForm />
+    <div className="flex h-screen w-full flex-col items-center justify-center">
+      <h1 className="mb-8 translate-x-[.2em] text-[clamp(3rem,6vw,6rem)] font-bold">
+        Lobbyist<span className="font-medium text-neutral-500">™</span>
+      </h1>
+      <div className="flex justify-between gap-7">
+        <AuthButton className="shadow-[0_5px_25px_-5px] shadow-foreground/40" />
       </div>
-    </>
+    </div>
   );
 }
