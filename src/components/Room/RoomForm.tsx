@@ -85,10 +85,15 @@ export default function RoomForm() {
     }
 
     // Successfully joined the room
-    toast.success("Successfully joined the room");
-    setRoomName("");
-    setPassword("");
-    router.push(`/dashboard/lobby/${room.name}`);
+    if (room) {
+      addUserRoom(room);
+      toast.success("Room joined successfully");
+      setRoomName("");
+      setPassword("");
+      router.push(`/dashboard/lobby/${room.name}`);
+    } else {
+      toast.error("Failed to join room");
+    }
   };
 
   const handleCreateRoom = async (e: React.FormEvent) => {

@@ -53,7 +53,7 @@ export default function ChatInput({
   };
 
   return (
-    <div className="p-3">
+    <div className="absolute bottom-0 left-0 w-full px-3 pb-3">
       <Input
         className="rounded-xl px-4"
         placeholder="Send a message"

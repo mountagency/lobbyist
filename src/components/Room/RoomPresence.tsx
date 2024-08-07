@@ -56,9 +56,9 @@ export default function RoomPresence({ room }: { room: Room }) {
     <div className="flex items-center gap-3">
       <div className="size-2 animate-pulse rounded-full bg-green-400"></div>
       <div className="flex items-center text-xs font-semibold">
-        {activeUsers?.map((user) => (
+        {activeUsers?.map((user, index) => (
           <div
-            key={user.user_id}
+            key={user.user_id + index}
             className={cn(
               "size-6 overflow-hidden rounded-full ring-2 ring-card [&:not(:last-child)]:-mr-0.5",
             )}
