@@ -5,12 +5,12 @@ import { type Metadata } from "next";
 import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
-  title: "Lobbyist™ Dashboard",
+  title: "Lobbyist™ Home",
   description: "A Mount™ lobby application",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
-export default async function DashboardLayout({
+export default async function LobbyLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   const supabase = createClient();

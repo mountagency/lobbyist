@@ -70,7 +70,7 @@ export default function RoomForm() {
       toast.error("Already in the room");
       setRoomName("");
       setPassword("");
-      router.push(`/dashboard/lobby/${room.name}`);
+      router.push(`/lobby/${room.name}`);
       return;
     }
 
@@ -91,7 +91,7 @@ export default function RoomForm() {
       toast.success("Room joined successfully");
       setRoomName("");
       setPassword("");
-      router.push(`/dashboard/lobby/${room.name}`);
+      router.push(`/lobby/${room.name}`);
     } else {
       toast.error("Failed to join room");
     }
@@ -133,7 +133,7 @@ export default function RoomForm() {
       toast.success("Room created and joined successfully");
       setRoomName("");
       setPassword("");
-      router.push(`/dashboard/lobby/${data.room.name}`);
+      router.push(`/lobby/${data.room.name}`);
     } else {
       toast.error("Failed to create room");
     }

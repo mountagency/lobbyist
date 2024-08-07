@@ -42,7 +42,7 @@ export default function RoomList({ initialRooms }: ClientRoomListProps) {
           <div key={room.id} className="flex items-center gap-2">
             <Link
               key={room.id}
-              href={`/dashboard/lobby/${room.name}`}
+              href={`/lobby/${room.name}`}
               className={cn(
                 buttonVariants({ variant: "outline" }),
                 "flex-1 text-left",

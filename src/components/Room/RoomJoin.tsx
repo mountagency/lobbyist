@@ -82,7 +82,7 @@ export default function RoomForm({
     // Successfully joined the room
     toast.success("Successfully joined the room");
     setPassword("");
-    router.push(`/dashboard/lobby/${room.name}`);
+    router.push(`/lobby/${room.name}`);
   };
 
   return (
