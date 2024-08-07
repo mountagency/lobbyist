@@ -1,4 +1,4 @@
-import SideBar from "@/components/Navigation/SideBar";
+import SideBar from "@/components/SideBar";
 import "@/styles/globals.css";
 import { createClient } from "@/utils/supabase/server";
 import { type Metadata } from "next";

@@ -1,10 +1,10 @@
 import Link from "next/link";
 import React from "react";
-import AuthButton from "../AuthButton";
-import RoomList from "../Room/RoomList";
 import { cn } from "@/lib/utils";
 import { createClient } from "@/utils/supabase/server";
 import { Room } from "@/lib/store/roomStore";
+import RoomList from "./Room/RoomList";
+import AuthButton from "./AuthButton";
 
 export default async function SideBar() {
   const supabase = createClient();
