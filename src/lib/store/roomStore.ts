@@ -9,22 +9,19 @@ export type Room = {
 };
 
 type RoomStore = {
-  currentRoom: Room | null;
-  rooms: Room[];
-  setCurrentRoom: (room: Room | null) => void;
-  setRooms: (rooms: Room[]) => void;
-  addRoom: (room: Room) => void;
-  removeRoom: (roomId: string) => void;
+  userRooms: Room[];
+  setUserRooms: (rooms: Room[]) => void;
+  addUserRoom: (room: Room) => void;
+  removeUserRoom: (roomId: string) => void;
 };
 
 export const useRoom = create<RoomStore>()((set) => ({
-  currentRoom: null,
-  rooms: [],
-  setCurrentRoom: (room) => set({ currentRoom: room }),
-  setRooms: (rooms) => set({ rooms }),
-  addRoom: (room) => set((state) => ({ rooms: [...state.rooms, room] })),
-  removeRoom: (roomId) =>
+  userRooms: [],
+  setUserRooms: (rooms) => set({ userRooms: rooms }),
+  addUserRoom: (room) =>
+    set((state) => ({ userRooms: [...state.userRooms, room] })),
+  removeUserRoom: (roomId) =>
     set((state) => ({
-      rooms: state.rooms.filter((room) => room.id !== roomId),
+      userRooms: state.userRooms.filter((room) => room.id !== roomId),
     })),
 }));

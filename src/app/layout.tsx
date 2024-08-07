@@ -1,6 +1,7 @@
 import AuthButton from "@/components/AuthButton";
 import InitRooms from "@/lib/store/InitRooms";
 import InitUser from "@/lib/store/InitUser";
+import { Room } from "@/lib/store/roomStore";
 import "@/styles/globals.css";
 import { createClient } from "@/utils/supabase/server";
 
@@ -23,7 +24,19 @@ export default async function RootLayout({
     data: { user },
   } = await supabase.auth.getUser();
 
-  const roomsData = await supabase.from("rooms").select("*");
+  let userRooms: Room[] = [];
+  if (user) {
+    const { data, error } = await supabase
+      .from("room_users")
+      .select("rooms(*)")
+      .eq("user_id", user.id);
+
+    if (!error && data) {
+      userRooms = data
+        .map((item) => item.rooms)
+        .filter((room): room is Room => room !== null);
+    }
+  }
 
   return (
     <>
@@ -34,7 +47,7 @@ export default async function RootLayout({
         </body>
       </html>
       <InitUser user={user} />
-      <InitRooms roomsData={roomsData} />
+      <InitRooms initialRooms={userRooms} />
     </>
   );
 }

@@ -1,4 +1,4 @@
-// app/room/[roomName]/page.tsx
+// app/lobby/[roomName]/page.tsx
 import { createClient } from "@/utils/supabase/server";
 import { notFound, redirect } from "next/navigation";
 import ChatSection from "@/components/Chat/ChatSection";

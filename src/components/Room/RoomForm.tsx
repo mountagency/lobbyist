@@ -19,7 +19,7 @@ export default function RoomForm() {
   const [roomName, setRoomName] = useState("");
   const [password, setPassword] = useState("");
   const { user } = useUser();
-  const { addRoom } = useRoom();
+  const { addUserRoom } = useRoom();
   const router = useRouter();
 
   const handleJoinRoom = async (e: React.FormEvent) => {
@@ -123,7 +123,7 @@ export default function RoomForm() {
     }
 
     if (data?.room) {
-      addRoom(data.room);
+      addUserRoom(data.room);
       toast.success("Room created and joined successfully");
       setRoomName("");
       setPassword("");

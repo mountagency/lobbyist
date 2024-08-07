@@ -1,31 +1,22 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Room, useRoom } from "./roomStore";
-import { PostgrestSingleResponse } from "@supabase/supabase-js";
 
 type InitRoomsProps = {
-  roomsData: PostgrestSingleResponse<Room[]>;
+  initialRooms: Room[];
 };
 
-export default function InitRooms({ roomsData }: InitRoomsProps) {
+export default function InitRooms({ initialRooms }: InitRoomsProps) {
   const initState = useRef(false);
+  const { setUserRooms } = useRoom();
 
   useEffect(() => {
     if (!initState.current) {
-      if (roomsData.error) {
-        console.error("Error fetching rooms:", roomsData.error);
-        return;
-      }
-
-      const rooms = roomsData.data || [];
-      useRoom.setState({ rooms });
+      setUserRooms(initialRooms);
+      initState.current = true;
     }
+  }, [initialRooms, setUserRooms]);
 
-    initState.current = true;
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  return <></>;
+  return null;
 }
