@@ -15,6 +15,7 @@ export type Database = {
           created_at: string
           id: string
           is_edited: boolean
+          room_id: string
           updated_at: string | null
           user_id: string
         }
@@ -23,6 +24,7 @@ export type Database = {
           created_at?: string
           id?: string
           is_edited?: boolean
+          room_id: string
           updated_at?: string | null
           user_id?: string
         }
@@ -31,10 +33,18 @@ export type Database = {
           created_at?: string
           id?: string
           is_edited?: boolean
+          room_id?: string
           updated_at?: string | null
           user_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "message_room_id_fkey"
+            columns: ["room_id"]
+            isOneToOne: false
+            referencedRelation: "rooms"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "message_user_id_fkey"
             columns: ["user_id"]
@@ -56,6 +66,7 @@ export type Database = {
           id: string
           is_active: boolean | null
           joined_at: string | null
+          last_active: string | null
           room_id: string | null
           user_id: string | null
         }
@@ -63,6 +74,7 @@ export type Database = {
           id?: string
           is_active?: boolean | null
           joined_at?: string | null
+          last_active?: string | null
           room_id?: string | null
           user_id?: string | null
         }
@@ -70,6 +82,7 @@ export type Database = {
           id?: string
           is_active?: boolean | null
           joined_at?: string | null
+          last_active?: string | null
           room_id?: string | null
           user_id?: string | null
         }

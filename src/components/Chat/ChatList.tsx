@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { ChatMessage } from "./ChatMessage";
 import { Message, useMessage } from "@/lib/store/messageStore";
 import { createClient } from "@/utils/supabase/client";
 import { toast } from "sonner";
+import { ChatMessage } from "./ChatMessage";
 
 export default function ChatList({
   roomId,

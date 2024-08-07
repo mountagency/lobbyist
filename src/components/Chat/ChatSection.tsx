@@ -2,6 +2,7 @@ import React from "react";
 import ChatInput from "./ChatInput";
 import ChatMessages from "./ChatMessages";
 import { Room } from "@/lib/store/roomStore";
+import RoomPresence from "../Room/RoomPresence";
 
 export default async function ChatSection({
   room,
@@ -12,9 +13,11 @@ export default async function ChatSection({
 }) {
   return (
     <div className="flex h-[calc(100vh-1.5rem)] w-[28rem] flex-col gap-2">
-      <div className="flex rounded-lg border border-border bg-card px-3 py-2 text-xl font-medium">
-        {room.name}
+      <div className="flex items-center justify-between gap-4 rounded-lg border border-border bg-card px-3 py-2 text-xl font-medium">
+        <h2>{room.name}</h2>
+        <RoomPresence room={room} />
       </div>
+
       <div className="relative flex flex-1 flex-col overflow-hidden rounded-lg border border-border bg-card">
         <div className="top-gradient absolute left-0 top-0 h-16 w-full"></div>
 

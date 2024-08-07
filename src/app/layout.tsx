@@ -1,4 +1,3 @@
-import AuthButton from "@/components/AuthButton";
 import InitRooms from "@/lib/store/InitRooms";
 import InitUser from "@/lib/store/InitUser";
 import { Room } from "@/lib/store/roomStore";
@@ -44,10 +43,10 @@ export default async function RootLayout({
         <body className="dark">
           <main className="flex min-h-screen flex-col">{children}</main>
           <Toaster position="top-right" />
+          <InitUser user={user} />
+          <InitRooms initialRooms={userRooms} />
         </body>
       </html>
-      <InitUser user={user} />
-      <InitRooms initialRooms={userRooms} />
     </>
   );
 }
