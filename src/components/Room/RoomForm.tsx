@@ -150,7 +150,7 @@ export default function RoomForm() {
             autoComplete="new-text"
             value={roomName}
             onChange={(e) => setRoomName(e.target.value)}
-            placeholder="Room Name"
+            placeholder="Lobby Name"
             required
           />
           <Input
@@ -159,7 +159,7 @@ export default function RoomForm() {
             autoComplete="new-password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="Room Password"
+            placeholder="Lobby Password"
             required
           />
           <div className="grid grid-cols-2 gap-2 pt-3">
