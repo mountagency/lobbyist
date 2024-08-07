@@ -45,7 +45,7 @@ export default function RoomPresence({ room }: { room: Room }) {
       });
 
     return () => {
-      void channel.unsubscribe();
+      channel.unsubscribe();
     };
   }, [user, room.id, supabase]);
 
