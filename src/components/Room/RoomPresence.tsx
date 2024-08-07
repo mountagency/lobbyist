@@ -7,6 +7,7 @@ import { type Room } from "@/lib/store/roomStore";
 import { useUser } from "@/lib/store/userStore";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
+import { AnimatePresence, motion } from "framer-motion";
 
 type PresenceState = {
   online_at: string;
@@ -44,7 +45,7 @@ export default function RoomPresence({ room }: { room: Room }) {
       });
 
     return () => {
-      channel.unsubscribe();
+      void channel.unsubscribe();
     };
   }, [user, room.id, supabase]);
 
@@ -53,25 +54,34 @@ export default function RoomPresence({ room }: { room: Room }) {
   }
 
   return (
-    <div className="flex items-center gap-3">
-      <div className="size-2 animate-pulse rounded-full bg-green-400"></div>
-      <div className="flex items-center text-xs font-semibold">
-        {activeUsers?.map((user, index) => (
-          <div
-            key={user.user_id + index}
-            className={cn(
-              "size-6 overflow-hidden rounded-full ring-2 ring-card [&:not(:last-child)]:-mr-0.5",
-            )}
-          >
-            <Image
-              src={user.avatar_url}
-              alt={`Message by user ${user.name}`}
-              width={128}
-              height={128}
-            />
+    <AnimatePresence>
+      {activeUsers.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="flex items-center gap-3"
+        >
+          <div className="size-2 animate-pulse rounded-full bg-green-400"></div>
+          <div className="flex items-center text-xs font-semibold">
+            {activeUsers?.map((user, index) => (
+              <div
+                key={user.user_id + index}
+                className={cn(
+                  "size-6 overflow-hidden rounded-full ring-2 ring-card [&:not(:last-child)]:-mr-0.5",
+                )}
+              >
+                <Image
+                  src={user.avatar_url}
+                  alt={`Message by user ${user.name}`}
+                  width={128}
+                  height={128}
+                />
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-    </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }

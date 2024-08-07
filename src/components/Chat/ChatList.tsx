@@ -6,6 +6,7 @@ import { createClient } from "@/utils/supabase/client";
 import { toast } from "sonner";
 import { ChatMessage } from "./ChatMessage";
 import { ArrowDown } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
 
 export default function ChatList({
   roomId,
@@ -65,7 +66,7 @@ export default function ChatList({
       .subscribe();
 
     return () => {
-      supabase.removeChannel(channel);
+      void supabase.removeChannel(channel);
     };
   }, [messages, roomId]);
 
@@ -98,42 +99,48 @@ export default function ChatList({
   };
 
   return (
-    <>
-      <div
-        ref={scrollRef}
-        onScroll={handleOnScroll}
-        className="no-scrollbar mb-10 flex h-full flex-1 flex-col overflow-y-auto pb-8"
-      >
-        <div className="flex-1"></div>
-        <div className="mt-12 space-y-1">
-          {messages.map((message, index) => {
-            const isSameUserAsPrevious =
-              index > 0 && messages[index - 1]?.user_id === message.user_id;
-            const isSameUserAsNext =
-              index < messages.length - 1 &&
-              messages[index + 1]?.user_id === message.user_id;
+    <AnimatePresence>
+      {messages && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          ref={scrollRef}
+          onScroll={handleOnScroll}
+          className="no-scrollbar mb-10 flex h-full flex-1 flex-col overflow-y-auto pb-8"
+        >
+          <div className="flex-1"></div>
+          <div className="space-y-1">
+            {messages.map((message, index) => {
+              const isSameUserAsPrevious =
+                index > 0 && messages[index - 1]?.user_id === message.user_id;
+              const isSameUserAsNext =
+                index < messages.length - 1 &&
+                messages[index + 1]?.user_id === message.user_id;
 
-            let position = "";
-            if (!isSameUserAsPrevious && isSameUserAsNext) {
-              position = "first";
-            } else if (isSameUserAsPrevious && isSameUserAsNext) {
-              position = "middle";
-            } else if (isSameUserAsPrevious && !isSameUserAsNext) {
-              position = "last";
-            } else {
-              position = "single";
-            }
-            return (
-              <ChatMessage
-                message={message}
-                key={index}
-                position={position}
-                userId={userId}
-              />
-            );
-          })}
-        </div>
-      </div>
+              let position = "";
+              if (!isSameUserAsPrevious && isSameUserAsNext) {
+                position = "first";
+              } else if (isSameUserAsPrevious && isSameUserAsNext) {
+                position = "middle";
+              } else if (isSameUserAsPrevious && !isSameUserAsNext) {
+                position = "last";
+              } else {
+                position = "single";
+              }
+              return (
+                <ChatMessage
+                  message={message}
+                  key={index}
+                  position={position}
+                  userId={userId}
+                />
+              );
+            })}
+          </div>
+        </motion.div>
+      )}
+
       {userScrolled && notification > 0 && (
         <div className="absolute bottom-16 left-1/2">
           <div
@@ -145,6 +152,6 @@ export default function ChatList({
           </div>
         </div>
       )}
-    </>
+    </AnimatePresence>
   );
 }

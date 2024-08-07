@@ -19,7 +19,7 @@ export default async function ChatSection({
       </div>
 
       <div className="relative flex flex-1 flex-col overflow-hidden rounded-lg border border-border bg-card">
-        <div className="top-gradient absolute left-0 top-0 h-16 w-full"></div>
+        {/* <div className="top-gradient absolute left-0 top-0 h-16 w-full"></div> */}
 
         <div className="flex flex-1 flex-col overflow-y-scroll px-3">
           <ChatMessages roomId={room.id} userId={userId} />
