@@ -30,7 +30,22 @@ export default function RoomPresence({ room }: { room: Room }) {
       .on("presence", { event: "sync" }, () => {
         const state = channel.presenceState<PresenceState>();
         const users = Object.values(state).flat();
-        setActiveUsers(users);
+
+        // Create a Map to store unique users by their user_id
+        const uniqueUsersMap = new Map<string, PresenceState>();
+        users.forEach((user) => {
+          if (
+            !uniqueUsersMap.has(user.user_id) ||
+            new Date(user.online_at) >
+              new Date(uniqueUsersMap.get(user.user_id)!.online_at)
+          ) {
+            uniqueUsersMap.set(user.user_id, user);
+          }
+        });
+
+        // Convert the Map back to an array
+        const uniqueUsers = Array.from(uniqueUsersMap.values());
+        setActiveUsers(uniqueUsers);
       })
       .subscribe(async (status) => {
         if (status !== "SUBSCRIBED") {
