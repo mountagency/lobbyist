@@ -5,6 +5,8 @@ import { createClient } from "@/utils/supabase/server";
 import { Room } from "@/lib/store/roomStore";
 import RoomList from "./Room/RoomList";
 import AuthButton from "./AuthButton";
+import { Button, buttonVariants } from "./ui/button";
+import RoomDialog from "./Room/RoomDialog";
 
 export default async function SideBar() {
   const supabase = createClient();
@@ -28,7 +30,7 @@ export default async function SideBar() {
   }
 
   return (
-    <div className="h-[100dvh] w-[18rem] p-3">
+    <div className="h-[100dvh] min-w-[18rem] p-3">
       <div className="flex h-full flex-col justify-between rounded-lg border border-border bg-card">
         <div className="space-y-4 p-3">
           <div className="flex items-center justify-center px-2 py-12">
@@ -39,6 +41,11 @@ export default async function SideBar() {
           <RoomList initialRooms={userRooms} />
         </div>
         <div className="p-3">
+          <div className="mb-5">
+            <RoomDialog
+              className={cn(buttonVariants({ variant: "secondary" }), "w-full")}
+            />
+          </div>
           <AuthButton />
         </div>
       </div>

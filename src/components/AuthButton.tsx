@@ -3,7 +3,7 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { Button } from "./ui/button";
 import Image from "next/image";
-import { EllipsisVertical, LogOut } from "lucide-react";
+import { LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
 import DiscordIcon from "./Icons/DiscordIcon";
 
@@ -48,13 +48,13 @@ export default async function AuthButton({ className }: Props) {
         <div className="size-6 overflow-hidden rounded-full">
           <Image
             src={data.user.user_metadata.avatar_url as string}
-            alt={`User image: ${data.user.user_metadata.full_name as string}`}
+            alt={`User image: ${data.user.user_metadata.custom_claims.global_name as string}`}
             width={128}
             height={128}
           />
         </div>
         <span className="text-sm text-neutral-500">
-          {data.user.user_metadata.full_name}
+          {data.user.user_metadata.custom_claims.global_name}
         </span>
       </div>
       <div className="flex">
@@ -63,9 +63,9 @@ export default async function AuthButton({ className }: Props) {
             <LogOut size={14} />
           </Button>
         </form>
-        <Button variant={"ghost"} className="h-auto p-2.5">
+        {/* <Button variant={"ghost"} className="h-auto p-2.5">
           <EllipsisVertical size={14} />
-        </Button>
+        </Button> */}
       </div>
     </div>
   ) : (

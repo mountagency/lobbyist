@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import bcrypt from "bcryptjs";
 import { useRouter } from "next/navigation";
 import { type PostgrestError } from "@supabase/supabase-js";
+import { DialogClose } from "../ui/dialog";
 
 type CreateRoomResult = {
   room: Room | null;
@@ -140,42 +141,34 @@ export default function RoomForm() {
   };
 
   return (
-    <div className="flex w-[28rem] self-start rounded-lg border border-border bg-card p-4">
-      <div className="w-full">
-        <form className="space-y-2" autoComplete="off">
-          <Input
-            className="rounded-xl"
-            type="text"
-            pattern="[a-z0-9-]+" // Only allow lowercase letters, numbers, and hyphens
-            autoComplete="new-text"
-            value={roomName}
-            onChange={(e) => setRoomName(e.target.value)}
-            placeholder="Lobby Name"
-            required
-          />
-          <Input
-            className="rounded-xl"
-            type="password"
-            autoComplete="new-password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Lobby Password"
-            required
-          />
-          <div className="grid grid-cols-2 gap-2 pt-3">
-            <Button
-              onClick={handleJoinRoom}
-              className="rounded-xl border border-neutral-700"
-              variant={"outline"}
-            >
-              Join Lobby
-            </Button>
-            <Button onClick={handleCreateRoom} className="rounded-xl">
-              Create Lobby +
-            </Button>
-          </div>
-        </form>
-      </div>
+    <div className="mt-4 w-full">
+      <form className="space-y-2" autoComplete="off">
+        <Input
+          className="rounded-xl"
+          type="text"
+          pattern="[a-z0-9-]+" // Only allow lowercase letters, numbers, and hyphens
+          autoComplete="new-text"
+          value={roomName}
+          onChange={(e) => setRoomName(e.target.value)}
+          placeholder="Lobby Name"
+          required
+        />
+        <Input
+          className="rounded-xl"
+          type="password"
+          autoComplete="new-password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="Lobby Password"
+          required
+        />
+        <div className="grid grid-cols-2 gap-2 pt-3">
+          <Button onClick={handleJoinRoom} variant={"outline"}>
+            Join Lobby
+          </Button>
+          <Button onClick={handleCreateRoom}>+ Create Lobby</Button>
+        </div>
+      </form>
     </div>
   );
 }

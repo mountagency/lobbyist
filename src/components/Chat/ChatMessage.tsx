@@ -1,5 +1,4 @@
 import { Message } from "@/lib/store/messageStore";
-import { useUser } from "@/lib/store/userStore";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 
@@ -26,7 +25,11 @@ export const ChatMessage = ({ message, position, userId }: Props) => {
     <div
       className={cn(
         "group flex items-center gap-3",
-        position === "first" || position === "single" ? "pt-3" : "",
+        !isOwnMessage && (position === "first" || position === "single")
+          ? "pt-7"
+          : isOwnMessage && (position === "first" || position === "single")
+            ? "pt-3"
+            : "",
       )}
     >
       {message.users && (
@@ -47,25 +50,46 @@ export const ChatMessage = ({ message, position, userId }: Props) => {
           </div>
         </div>
       )}
-      <div className={cn("flex w-full items-center justify-between gap-3")}>
+      <div
+        className={cn(
+          "relative flex w-full items-center justify-between gap-3",
+        )}
+      >
+        {!isOwnMessage && (position === "first" || position === "single") && (
+          <span className="absolute left-0 top-0 -translate-y-4 translate-x-2 text-[.6rem] leading-[.8] text-neutral-600">
+            {message.users?.display_name}
+          </span>
+        )}
         <div
           className={cn(
-            "w-auto max-w-[calc(100%-3rem)] rounded-2xl px-2.5 py-2",
-            isOwnMessage ? "ml-auto self-end bg-indigo-500" : "bg-neutral-700",
-            isOwnMessage && position === "first"
-              ? "rounded-br"
-              : isOwnMessage && position === "middle"
-                ? "rounded-r"
-                : isOwnMessage && position === "last" && "rounded-tr",
-
-            !isOwnMessage && position === "first"
-              ? "rounded-bl"
-              : !isOwnMessage && position === "middle"
-                ? "rounded-l"
-                : !isOwnMessage && position === "last" && "rounded-tl",
+            "relative w-auto max-w-[calc(100%-3rem)]",
+            isOwnMessage && "ml-auto self-end",
           )}
         >
-          <p>{message.content}</p>
+          <div
+            className={cn(
+              "rounded-2xl px-2.5 py-2",
+              isOwnMessage ? "bg-indigo-500" : "bg-neutral-700",
+              isOwnMessage && position === "first"
+                ? "rounded-br"
+                : isOwnMessage && position === "middle"
+                  ? "rounded-r"
+                  : isOwnMessage && position === "last" && "rounded-tr",
+
+              !isOwnMessage && position === "first"
+                ? "rounded-bl"
+                : !isOwnMessage && position === "middle"
+                  ? "rounded-l"
+                  : !isOwnMessage && position === "last" && "rounded-tl",
+            )}
+          >
+            <p>{message.content}</p>
+          </div>
+          {/* <div className="bottom-0 flex -translate-y-1 translate-x-2">
+            <div className="flex items-center rounded-full bg-neutral-700 p-1.5 ring-2 ring-card">
+              <p className="text-xs leading-[.9]">💚</p>
+            </div>
+          </div> */}
         </div>
         {/* <span className="hidden text-[.65rem] leading-none opacity-40 group-hover:block">
           {formattedDate}

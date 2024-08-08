@@ -26,7 +26,7 @@ export default async function LobbyLayout({
   return (
     <section className="flex">
       <SideBar />
-      <main className="flex min-h-screen flex-col py-3">{children}</main>
+      <main className="flex min-h-screen w-full flex-col py-3">{children}</main>
     </section>
   );
 }

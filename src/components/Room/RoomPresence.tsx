@@ -39,7 +39,7 @@ export default function RoomPresence({ room }: { room: Room }) {
         await channel.track({
           online_at: new Date().toISOString(),
           user_id: user?.id,
-          name: user?.user_metadata.full_name as string,
+          name: user?.user_metadata.custom_claims.global_name as string,
           avatar_url: user?.user_metadata.avatar_url as string,
         });
       });
@@ -54,7 +54,7 @@ export default function RoomPresence({ room }: { room: Room }) {
   }
 
   return (
-    <AnimatePresence>
+    <>
       {activeUsers.length > 0 && (
         <motion.div
           initial={{ opacity: 0 }}
@@ -82,6 +82,6 @@ export default function RoomPresence({ room }: { room: Room }) {
           </div>
         </motion.div>
       )}
-    </AnimatePresence>
+    </>
   );
 }

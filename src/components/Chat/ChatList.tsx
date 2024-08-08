@@ -97,7 +97,7 @@ export default function ChatList({
   };
 
   return (
-    <AnimatePresence>
+    <>
       {messages && (
         <motion.div
           initial={{ opacity: 0 }}
@@ -129,7 +129,7 @@ export default function ChatList({
               return (
                 <ChatMessage
                   message={message}
-                  key={index}
+                  key={message.id + index}
                   position={position}
                   userId={userId}
                 />
@@ -150,6 +150,6 @@ export default function ChatList({
           </div>
         </div>
       )}
-    </AnimatePresence>
+    </>
   );
 }
