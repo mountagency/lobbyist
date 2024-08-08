@@ -7,12 +7,19 @@ import { type Room } from "@/lib/store/roomStore";
 import { useUser } from "@/lib/store/userStore";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 
 type PresenceState = {
   online_at: string;
   user_id: string;
   name: string;
+  avatar_url: string;
+};
+
+type UserMetaData = {
+  custom_claims: {
+    global_name: string;
+  };
   avatar_url: string;
 };
 
@@ -54,8 +61,8 @@ export default function RoomPresence({ room }: { room: Room }) {
         await channel.track({
           online_at: new Date().toISOString(),
           user_id: user?.id,
-          name: user?.user_metadata.custom_claims.global_name as string,
-          avatar_url: user?.user_metadata.avatar_url as string,
+          name: (user?.user_metadata as UserMetaData).custom_claims.global_name,
+          avatar_url: (user?.user_metadata as UserMetaData).avatar_url,
         });
       });
 

@@ -10,6 +10,14 @@ import DiscordIcon from "./Icons/DiscordIcon";
 type Props = {
   className?: string;
 };
+
+type UserMetaData = {
+  custom_claims: {
+    global_name: string;
+  };
+  avatar_url: string;
+};
+
 export default async function AuthButton({ className }: Props) {
   const supabase = createClient();
   const { data } = await supabase.auth.getUser();
@@ -47,14 +55,14 @@ export default async function AuthButton({ className }: Props) {
       <div className="ml-2 flex items-center gap-4">
         <div className="size-6 overflow-hidden rounded-full">
           <Image
-            src={data.user.user_metadata.avatar_url as string}
-            alt={`User image: ${data.user.user_metadata.custom_claims.global_name as string}`}
+            src={(data.user.user_metadata as UserMetaData).avatar_url}
+            alt={`User image: ${(data.user.user_metadata as UserMetaData).custom_claims.global_name}`}
             width={128}
             height={128}
           />
         </div>
         <span className="text-sm text-neutral-500">
-          {data.user.user_metadata.custom_claims.global_name}
+          {(data.user.user_metadata as UserMetaData).custom_claims.global_name}
         </span>
       </div>
       <div className="flex">

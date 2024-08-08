@@ -8,6 +8,13 @@ import { useUser } from "@/lib/store/userStore";
 import { v4 as uuidv4 } from "uuid";
 import { Message, useMessage } from "@/lib/store/messageStore";
 
+type UserMetaData = {
+  custom_claims: {
+    global_name: string;
+  };
+  avatar_url: string;
+};
+
 export default function ChatInput({
   roomId,
   userId,
@@ -22,6 +29,10 @@ export default function ChatInput({
   const addMessage = useMessage((state) => state.addMessage);
   const setOptimisticIds = useMessage((state) => state.setOptimisticIds);
 
+  if (!user) {
+    return null;
+  }
+
   const handleSendMessage = async (content: string) => {
     if (content.trim()) {
       const id = uuidv4();
@@ -33,10 +44,11 @@ export default function ChatInput({
         is_edited: false,
         created_at: new Date().toISOString(),
         users: {
-          id: user?.id,
-          avatar_url: user?.user_metadata.avatar_url as string,
+          id: user.id,
+          avatar_url: (user.user_metadata as UserMetaData).avatar_url,
           created_at: new Date().toISOString(),
-          display_name: user?.user_metadata.custom_claims.global_name as string,
+          display_name: (user.user_metadata as UserMetaData).custom_claims
+            .global_name as string,
         },
       };
       addMessage(newMessage as Message);

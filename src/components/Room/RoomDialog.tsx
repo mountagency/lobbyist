@@ -17,7 +17,7 @@ export default function RoomDialog({ className }: Props) {
       <DialogTrigger className={className}>+ New lobby</DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Let's get you into a lobby</DialogTitle>
+          <DialogTitle>Let&apos;s get you into a lobby</DialogTitle>
         </DialogHeader>
         <RoomForm />
       </DialogContent>
