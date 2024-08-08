@@ -90,7 +90,7 @@ export default function RoomPresence({ room }: { room: Room }) {
               <div
                 key={user.user_id + index}
                 className={cn(
-                  "size-6 overflow-hidden rounded-full ring-2 ring-card [&:not(:last-child)]:-mr-0.5",
+                  "size-6 overflow-hidden rounded-full bg-card ring-2 ring-card [&:not(:last-child)]:-mr-0.5",
                 )}
               >
                 <Image

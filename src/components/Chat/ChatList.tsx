@@ -5,8 +5,6 @@ import { Message, useMessage } from "@/lib/store/messageStore";
 import { createClient } from "@/utils/supabase/client";
 import { toast } from "sonner";
 import { ChatMessage } from "./ChatMessage";
-import { ArrowDown } from "lucide-react";
-import { AnimatePresence, motion } from "framer-motion";
 
 export default function ChatList({
   roomId,
