@@ -1,7 +1,14 @@
-// app/room/[roomName]/page.tsx
 import { createClient } from "@/utils/supabase/server";
 import { notFound, redirect } from "next/navigation";
 import RoomJoin from "@/components/Room/RoomJoin";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 export default async function RoomPage({
   params,
@@ -28,15 +35,24 @@ export default async function RoomPage({
 
   if (!user) {
     // Redirect to login page if not authenticated
-    redirect("/");
+    redirect("/lobby");
   }
 
   return (
-    <>
-      <div className="mt-12 flex justify-between">
-        <h1 className="mb-4 text-2xl font-bold">Join {room.name}</h1>
-        <RoomJoin userId={user.id} roomId={room.id} />
-      </div>
-    </>
+    <div className="flex h-[100dvh] items-center justify-center">
+      <Card className="w-[24rem]">
+        <CardHeader className="text-center">
+          <CardTitle>
+            Join lobby <span className="text-neutral-400">{room.name}</span>
+          </CardTitle>
+          <CardDescription className="pt-3">
+            Enter the password to join the room
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <RoomJoin userId={user.id} roomId={room.id} />
+        </CardContent>
+      </Card>
+    </div>
   );
 }

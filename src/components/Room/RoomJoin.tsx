@@ -6,7 +6,7 @@ import { createClient } from "@/utils/supabase/client";
 import { Button } from "../ui/button";
 import { toast } from "sonner";
 import bcrypt from "bcryptjs";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 
 export default function RoomForm({
   userId,
@@ -18,14 +18,23 @@ export default function RoomForm({
   const [password, setPassword] = useState("");
   const router = useRouter();
 
+  const supabase = createClient();
+  const user = supabase.auth.getUser();
+
+  if (!user) {
+    return redirect("/");
+  }
+
+  const handleCancel = () => {
+    return redirect("/");
+  };
+
   const handleJoinRoom = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!userId) {
       toast.error("You must be logged in to join a room");
       return;
     }
-
-    const supabase = createClient();
 
     // Check if the room exists
     const { data: room, error: roomError } = await supabase
@@ -64,7 +73,7 @@ export default function RoomForm({
       // User is already in the room, just redirect
       toast.error("Already in the room");
       setPassword("");
-      router.push(`/room/${room.name}`);
+      router.push(`/lobby/${room.name}`);
       return;
     }
 
@@ -93,14 +102,16 @@ export default function RoomForm({
         autoComplete="new-password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
-        placeholder="Room Password"
+        placeholder="Lobby Password"
         required
       />
-      <div className="grid grid-cols-2 gap-2 pt-3">
+      <div className="grid gap-2 pt-3">
+        {/* <Button onClick={handleCancel} variant={"outline"}>
+          Cancel
+        </Button> */}
         <Button
           onClick={handleJoinRoom}
-          className="rounded-xl border border-neutral-700"
-          variant={"outline"}
+          className="justify-center rounded-xl border border-neutral-700"
         >
           Join Lobby
         </Button>
