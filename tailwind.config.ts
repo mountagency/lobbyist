@@ -1,13 +1,13 @@
-import type { Config } from "tailwindcss"
+import type { Config } from "tailwindcss";
 
 const config = {
   darkMode: ["class"],
   content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
-	],
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
+  ],
   prefix: "",
   theme: {
     container: {
@@ -16,6 +16,18 @@ const config = {
       screens: {
         "2xl": "1400px",
       },
+    },
+    fontSize: {
+      xs: ["0.75rem", { lineHeight: "1.5" }],
+      sm: ["0.875rem", { lineHeight: "1.5" }],
+      base: ["1rem", { lineHeight: "1.5" }],
+      md: ["1rem", { lineHeight: "1.5" }],
+      lg: ["1.125rem", { lineHeight: "1.4" }],
+      xl: ["1.125rem", { lineHeight: "1.25" }],
+      "2xl": ["clamp(1.25rem, 3vw, 1.75rem)", { lineHeight: "1.1" }],
+      "3xl": ["clamp(1.5rem, 3vw, 2rem)", { lineHeight: "1.1" }],
+      "4xl": ["clamp(1.75rem, 4vw, 3rem)", { lineHeight: "1.1" }],
+      "5xl": ["clamp(1.75rem, 4vw, 4rem)", { lineHeight: "1.1" }],
     },
     extend: {
       colors: {
@@ -75,6 +87,6 @@ const config = {
     },
   },
   plugins: [require("tailwindcss-animate")],
-} satisfies Config
+} satisfies Config;
 
-export default config
+export default config;

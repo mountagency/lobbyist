@@ -47,7 +47,7 @@ export default function RoomList({ initialRooms }: ClientRoomListProps) {
   if (userRooms.length === 0) {
     return (
       <div className="text-center text-sm text-neutral-500">
-        No lobbies yet.
+        Create or join your first lobby
       </div>
     );
   }

@@ -14,7 +14,7 @@ export default async function HomePage() {
 
   return (
     <div className="flex h-screen w-full flex-col items-center justify-center">
-      <h1 className="mb-8 translate-x-[.2em] text-[clamp(3rem,6vw,6rem)] font-bold">
+      <h1 className="mb-8 translate-x-[.2em] text-[clamp(3rem,7vw,6rem)] font-medium">
         Lobbyist<span className="font-medium text-neutral-500">™</span>
       </h1>
       <div className="flex justify-between gap-7">
