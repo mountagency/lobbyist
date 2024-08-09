@@ -27,7 +27,7 @@ type UserMetaData = {
 
 export default function RoomPresence({ room }: { room: Room }) {
   const { user } = useUser();
-  const { userRooms, setUserRooms } = useRoom();
+  const { optimisticDeleteRoom } = useRoom();
   const supabase = createClient();
   const [activeUsers, setActiveUsers] = useState<PresenceState[]>([]);
 
@@ -36,7 +36,7 @@ export default function RoomPresence({ room }: { room: Room }) {
   useEffect(() => {
     if (!user) return;
 
-    const channel = supabase.channel(`room:${room.id}`);
+    const channel = supabase.channel(`room_updates`);
 
     channel
       .on("presence", { event: "sync" }, () => {
@@ -60,9 +60,8 @@ export default function RoomPresence({ room }: { room: Room }) {
         setActiveUsers(uniqueUsers);
       })
       .on("broadcast", { event: "room_deleted" }, () => {
-        const newRooms = userRooms.filter((room) => room.id);
-        setUserRooms(newRooms);
         toast.info(`${room.name} has been deleted by the host`);
+        optimisticDeleteRoom(room.id);
         router.push("/lobby");
       })
       .subscribe(async (status) => {

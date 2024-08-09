@@ -15,8 +15,7 @@ export default async function UserPage() {
   return (
     <div className="flex h-full w-full items-center justify-center">
       <h1 className="text-5xl font-medium">
-        Welcome,{" "}
-        {(user?.user_metadata as UserMetaData).custom_claims.global_name} 👋
+        Hi, {(user?.user_metadata as UserMetaData).custom_claims.global_name} 👋
       </h1>
     </div>
   );

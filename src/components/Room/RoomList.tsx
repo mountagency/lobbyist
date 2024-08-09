@@ -19,19 +19,19 @@ import { useUser } from "@/lib/store/userStore";
 import { toast } from "sonner";
 import { PostgrestError } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
+import RoomListItem from "./RoomListItem";
 
 type ClientRoomListProps = {
   initialRooms: Room[];
 };
 
-type DeleteRoomResult = {
-  room: Room | null;
-  error: string | null;
+type DeleteRoomPayload = {
+  room: string;
 };
 
 export default function RoomList({ initialRooms }: ClientRoomListProps) {
   const { user } = useUser();
-  const { userRooms, setUserRooms } = useRoom();
+  const { userRooms, setUserRooms, optimisticDeleteRoom } = useRoom();
   const supabase = createClient();
   const router = useRouter();
 
@@ -41,6 +41,27 @@ export default function RoomList({ initialRooms }: ClientRoomListProps) {
     setUserRooms(initialRooms);
     setIsLoading(false);
   }, [initialRooms, setUserRooms]);
+
+  useEffect(() => {
+    const channel = supabase.channel("room_updates");
+
+    channel
+      .on(
+        "broadcast",
+        { event: "room_deleted" },
+        ({ payload }: { payload: DeleteRoomPayload }) => {
+          if (payload.room) {
+            console.log("Room deleted", payload.room);
+            optimisticDeleteRoom(payload.room);
+          }
+        },
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [optimisticDeleteRoom, supabase]);
 
   if (!user) {
     return null;
@@ -68,36 +89,28 @@ export default function RoomList({ initialRooms }: ClientRoomListProps) {
 
   const handleDeleteRoom = async (roomId: string) => {
     setIsLoading(true);
+
     const supabase = createClient();
+    const channel = supabase.channel("room_updates");
 
-    const channel = supabase.channel(`room:${roomId}`);
-    channel.subscribe(async (status) => {
-      if (status === "SUBSCRIBED") {
-        await channel.send({
-          type: "broadcast",
-          event: "room_deleted",
-          payload: { message: "This room is being deleted" },
-        });
-
-        channel.unsubscribe();
-      }
-    });
-
-    // Use setTimeout to delay the actual deletion
-    const { error } = (await supabase.rpc("delete_room_and_related_data", {
+    const { error } = await supabase.rpc("delete_room_and_related_data", {
       input_room_id: roomId,
       input_user_id: user.id,
-    })) as { data: DeleteRoomResult | null; error: PostgrestError };
+    });
 
     if (error) {
-      setUserRooms(userRooms);
       toast.error(error.message);
       setIsLoading(false);
       return;
     }
 
-    const newRooms = userRooms.filter((room) => room.id !== roomId);
-    setUserRooms(newRooms);
+    await channel.send({
+      type: "broadcast",
+      event: "room_deleted",
+      payload: { room: roomId },
+    });
+
+    optimisticDeleteRoom(roomId);
     router.push("/lobby");
     setIsLoading(false);
   };
@@ -144,41 +157,13 @@ export default function RoomList({ initialRooms }: ClientRoomListProps) {
       {userRooms.map((room) => {
         const isOwner = room.created_by === user.id;
         return (
-          <div key={room.id} className="flex items-center gap-2">
-            <ContextMenu>
-              <ContextMenuTrigger className="flex-1">
-                <Link
-                  key={room.id}
-                  href={`/lobby/${room.name}`}
-                  className={cn(
-                    buttonVariants({ variant: "outline" }),
-                    "w-full",
-                  )}
-                >
-                  {room.name}
-                </Link>
-              </ContextMenuTrigger>
-              <ContextMenuContent>
-                <ContextMenuItem onClick={() => handleLeaveRoom(room.id)}>
-                  Leave
-                  <ContextMenuShortcut>
-                    <LogOut size={14} />
-                  </ContextMenuShortcut>
-                </ContextMenuItem>
-                {isOwner && (
-                  <ContextMenuItem
-                    onClick={() => handleDeleteRoom(room.id)}
-                    disabled={!isOwner}
-                  >
-                    Delete
-                    <ContextMenuShortcut>
-                      <Trash size={14} />
-                    </ContextMenuShortcut>
-                  </ContextMenuItem>
-                )}
-              </ContextMenuContent>
-            </ContextMenu>
-          </div>
+          <RoomListItem
+            key={room.id}
+            isOwner={isOwner}
+            room={room}
+            handleLeaveRoom={() => handleLeaveRoom(room.id)}
+            handleDeleteRoom={() => handleDeleteRoom(room.id)}
+          />
         );
       })}
     </motion.div>
