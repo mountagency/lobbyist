@@ -9,7 +9,7 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 
 type PresenceState = {
   online_at: string;
@@ -25,6 +25,10 @@ type UserMetaData = {
   avatar_url: string;
 };
 
+type RoomBroadcastPayload = {
+  room: Room;
+};
+
 export default function RoomPresence({ room }: { room: Room }) {
   const { user } = useUser();
   const { optimisticDeleteRoom } = useRoom();
@@ -32,11 +36,12 @@ export default function RoomPresence({ room }: { room: Room }) {
   const [activeUsers, setActiveUsers] = useState<PresenceState[]>([]);
 
   const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     if (!user) return;
 
-    const channel = supabase.channel(`room_updates`);
+    const channel = supabase.channel(`room:${room.id}`);
 
     channel
       .on("presence", { event: "sync" }, () => {
@@ -59,11 +64,6 @@ export default function RoomPresence({ room }: { room: Room }) {
         const uniqueUsers = Array.from(uniqueUsersMap.values());
         setActiveUsers(uniqueUsers);
       })
-      .on("broadcast", { event: "room_deleted" }, () => {
-        toast.info(`${room.name} has been deleted by the host`);
-        optimisticDeleteRoom(room.id);
-        router.push("/lobby");
-      })
       .subscribe(async (status) => {
         if (status !== "SUBSCRIBED") {
           return;
@@ -80,6 +80,30 @@ export default function RoomPresence({ room }: { room: Room }) {
       channel.unsubscribe();
     };
   }, [user, room.id, supabase, router]);
+
+  useEffect(() => {
+    const channel = supabase.channel("room_updates");
+
+    channel
+      .on(
+        "broadcast",
+        { event: "room_deleted" },
+        ({ payload }: { payload: RoomBroadcastPayload }) => {
+          if (payload.room) {
+            toast.error(`Lobby has been deleted`);
+            optimisticDeleteRoom(payload.room.id);
+            if (pathname === `/lobby/${payload.room.name}`) {
+              router.push("/lobby");
+            }
+          }
+        },
+      )
+      .subscribe();
+
+    return () => {
+      channel.unsubscribe();
+    };
+  }, [supabase, router]);
 
   if (!user) {
     return <div className="h-3 w-1"></div>;

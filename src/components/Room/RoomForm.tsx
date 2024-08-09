@@ -26,7 +26,7 @@ export default function RoomForm() {
   const handleJoinRoom = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user) {
-      toast.error("You must be logged in to join a room");
+      toast.error("You must be logged in to join a lobby");
       return;
     }
 
@@ -40,7 +40,7 @@ export default function RoomForm() {
       .single();
 
     if (roomError ?? !room) {
-      toast.error("Room not found");
+      toast.error("Lobby not found");
       return;
     }
 
@@ -67,7 +67,7 @@ export default function RoomForm() {
 
     if (existingMembership) {
       // User is already in the room, just redirect
-      toast.error("Already in the room");
+      toast.error("Already in the lobby");
       setRoomName("");
       setPassword("");
       router.push(`/lobby/${room.name}`);
@@ -81,20 +81,20 @@ export default function RoomForm() {
     });
 
     if (joinError) {
-      toast.error("Failed to join the room");
+      toast.error("Failed to join the lobby");
       return;
     }
 
     // Successfully joined the room
     if (room) {
       addUserRoom(room);
-      toast.success("Room joined successfully");
+      toast.success("Lobby joined successfully");
       setRoomName("");
       setPassword("");
       setRoomDialogOpen(false);
       router.push(`/lobby/${room.name}`);
     } else {
-      toast.error("Failed to join room");
+      toast.error("Failed to join lobby");
     }
   };
 
@@ -108,7 +108,9 @@ export default function RoomForm() {
 
     // Check if the name matches the pattern
     if (!/^[a-z0-9-]+$/.test(roomName)) {
-      toast.error("Room name must be lowercase letters, numbers, and hyphens");
+      toast.error(
+        "Lobby name must be lowercase letters, numbers, and hyphens.",
+      );
       return;
     }
 

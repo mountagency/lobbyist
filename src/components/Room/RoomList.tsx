@@ -87,14 +87,14 @@ export default function RoomList({ initialRooms }: ClientRoomListProps) {
     router.push("/lobby");
   };
 
-  const handleDeleteRoom = async (roomId: string) => {
+  const handleDeleteRoom = async (room: Room) => {
     setIsLoading(true);
 
     const supabase = createClient();
     const channel = supabase.channel("room_updates");
 
     const { error } = await supabase.rpc("delete_room_and_related_data", {
-      input_room_id: roomId,
+      input_room_id: room.id,
       input_user_id: user.id,
     });
 
@@ -107,10 +107,10 @@ export default function RoomList({ initialRooms }: ClientRoomListProps) {
     await channel.send({
       type: "broadcast",
       event: "room_deleted",
-      payload: { room: roomId },
+      payload: { room: room },
     });
 
-    optimisticDeleteRoom(roomId);
+    optimisticDeleteRoom(room.id);
     router.push("/lobby");
     setIsLoading(false);
   };
@@ -157,13 +157,41 @@ export default function RoomList({ initialRooms }: ClientRoomListProps) {
       {userRooms.map((room) => {
         const isOwner = room.created_by === user.id;
         return (
-          <RoomListItem
-            key={room.id}
-            isOwner={isOwner}
-            room={room}
-            handleLeaveRoom={() => handleLeaveRoom(room.id)}
-            handleDeleteRoom={() => handleDeleteRoom(room.id)}
-          />
+          <div key={room.id} className="flex items-center gap-2">
+            <ContextMenu>
+              <ContextMenuTrigger className="flex-1">
+                <Link
+                  key={room.id}
+                  href={`/lobby/${room.name}`}
+                  className={cn(
+                    buttonVariants({ variant: "outline" }),
+                    "w-full",
+                  )}
+                >
+                  {room.name}
+                </Link>
+              </ContextMenuTrigger>
+              <ContextMenuContent>
+                <ContextMenuItem onClick={() => handleLeaveRoom(room.id)}>
+                  Leave
+                  <ContextMenuShortcut>
+                    <LogOut size={14} />
+                  </ContextMenuShortcut>
+                </ContextMenuItem>
+                {isOwner && (
+                  <ContextMenuItem
+                    onClick={() => handleDeleteRoom(room)}
+                    disabled={!isOwner}
+                  >
+                    Delete
+                    <ContextMenuShortcut>
+                      <Trash size={14} />
+                    </ContextMenuShortcut>
+                  </ContextMenuItem>
+                )}
+              </ContextMenuContent>
+            </ContextMenu>
+          </div>
         );
       })}
     </motion.div>

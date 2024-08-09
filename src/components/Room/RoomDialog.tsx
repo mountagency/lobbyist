@@ -19,10 +19,10 @@ export default function RoomDialog({ className }: Props) {
 
   return (
     <Dialog open={roomDialogOpen} onOpenChange={setRoomDialogOpen}>
-      <DialogTrigger className={className}>+ New lobby</DialogTrigger>
+      <DialogTrigger className={className}>+ New Lobby</DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Let&apos;s get you into a lobby</DialogTitle>
+          <DialogTitle>Let&apos;s get you into a Lobby</DialogTitle>
         </DialogHeader>
         <RoomForm />
       </DialogContent>
