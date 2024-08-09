@@ -5,6 +5,7 @@ import { Message, useMessage } from "@/lib/store/messageStore";
 import { createClient } from "@/utils/supabase/client";
 import { toast } from "sonner";
 import { ChatMessage } from "./ChatMessage";
+import { motion } from "framer-motion";
 
 export default function ChatList({
   roomId,

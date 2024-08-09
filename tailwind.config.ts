@@ -28,6 +28,7 @@ const config = {
       "3xl": ["1.75rem", { lineHeight: "1.1" }],
       "4xl": ["clamp(1.75rem, 4vw, 3rem)", { lineHeight: "1.1" }],
       "5xl": ["clamp(1.75rem, 4vw, 4rem)", { lineHeight: "1.1" }],
+      display: ["clamp(2.5rem, 6vw, 7rem)", { lineHeight: ".9" }],
     },
     extend: {
       colors: {
