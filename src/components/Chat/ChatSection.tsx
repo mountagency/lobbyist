@@ -12,7 +12,7 @@ export default async function ChatSection({
   userId: string;
 }) {
   return (
-    <div className="flex h-[calc(100vh-1.5rem)] w-[28rem] flex-col gap-2">
+    <div className="flex h-[calc(100vh-1.5rem)] w-[28rem] flex-col gap-3">
       <div className="flex items-center justify-between gap-4 rounded-lg border border-border bg-card px-3 py-3">
         <h2 className="ml-1 font-medium">{room.name}</h2>
         <RoomPresence room={room} />
