@@ -10,16 +10,19 @@ export type Room = {
 
 type RoomStore = {
   userRooms: Room[];
+  roomDialogOpen: boolean;
   optimisticIds: string[];
   setUserRooms: (rooms: Room[]) => void;
   addUserRoom: (room: Room) => void;
   removeUserRoom: (roomId: string) => void;
   optimisticDeleteRoom: (messageId: string) => void;
+  setRoomDialogOpen: (open: boolean) => void;
 };
 
 export const useRoom = create<RoomStore>()((set) => ({
   userRooms: [],
   optimisticIds: [],
+  roomDialogOpen: false,
   setUserRooms: (rooms) => set({ userRooms: rooms }),
   addUserRoom: (room) =>
     set((state) => ({ userRooms: [...state.userRooms, room] })),
@@ -33,4 +36,5 @@ export const useRoom = create<RoomStore>()((set) => ({
         userRooms: state.userRooms.filter((room) => room.id !== roomId),
       };
     }),
+  setRoomDialogOpen: (open) => set({ roomDialogOpen: open }),
 }));

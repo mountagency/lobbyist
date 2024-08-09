@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -7,13 +9,16 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 import RoomForm from "./RoomForm";
+import { useRoom } from "@/lib/store/roomStore";
 
 type Props = {
   className?: string;
 };
 export default function RoomDialog({ className }: Props) {
+  const { roomDialogOpen, setRoomDialogOpen } = useRoom();
+
   return (
-    <Dialog>
+    <Dialog open={roomDialogOpen} onOpenChange={setRoomDialogOpen}>
       <DialogTrigger className={className}>+ New lobby</DialogTrigger>
       <DialogContent>
         <DialogHeader>

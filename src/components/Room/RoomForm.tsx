@@ -20,7 +20,7 @@ export default function RoomForm() {
   const [roomName, setRoomName] = useState("");
   const [password, setPassword] = useState("");
   const { user } = useUser();
-  const { addUserRoom } = useRoom();
+  const { addUserRoom, setRoomDialogOpen } = useRoom();
   const router = useRouter();
 
   const handleJoinRoom = async (e: React.FormEvent) => {
@@ -91,6 +91,7 @@ export default function RoomForm() {
       toast.success("Room joined successfully");
       setRoomName("");
       setPassword("");
+      setRoomDialogOpen(false);
       router.push(`/lobby/${room.name}`);
     } else {
       toast.error("Failed to join room");
@@ -133,6 +134,7 @@ export default function RoomForm() {
       toast.success("Room created and joined successfully");
       setRoomName("");
       setPassword("");
+      setRoomDialogOpen(false);
       router.push(`/lobby/${data.room.name}`);
     } else {
       toast.error("Failed to create room");
@@ -141,7 +143,7 @@ export default function RoomForm() {
 
   return (
     <div className="mt-4 w-full">
-      <form className="space-y-2" autoComplete="off">
+      <div className="space-y-2">
         <Input
           className="rounded-xl"
           type="text"
@@ -167,7 +169,7 @@ export default function RoomForm() {
           </Button>
           <Button onClick={handleCreateRoom}>+ Create Lobby</Button>
         </div>
-      </form>
+      </div>
     </div>
   );
 }
