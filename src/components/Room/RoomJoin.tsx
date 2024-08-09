@@ -7,6 +7,7 @@ import { Button } from "../ui/button";
 import { toast } from "sonner";
 import bcrypt from "bcryptjs";
 import { redirect, useRouter } from "next/navigation";
+import { useRoom } from "@/lib/store/roomStore";
 
 export default function RoomForm({
   userId,
@@ -16,6 +17,7 @@ export default function RoomForm({
   roomId: string;
 }) {
   const [password, setPassword] = useState("");
+  const { addUserRoom } = useRoom();
   const router = useRouter();
 
   const supabase = createClient();
@@ -24,10 +26,6 @@ export default function RoomForm({
   if (!user) {
     return redirect("/");
   }
-
-  const handleCancel = () => {
-    return redirect("/");
-  };
 
   const handleJoinRoom = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -71,6 +69,7 @@ export default function RoomForm({
 
     if (existingMembership) {
       // User is already in the room, just redirect
+      addUserRoom(room);
       toast.error("Already in the room");
       setPassword("");
       router.push(`/lobby/${room.name}`);

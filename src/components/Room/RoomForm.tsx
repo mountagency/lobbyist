@@ -10,7 +10,6 @@ import { toast } from "sonner";
 import bcrypt from "bcryptjs";
 import { useRouter } from "next/navigation";
 import { type PostgrestError } from "@supabase/supabase-js";
-import { DialogClose } from "../ui/dialog";
 
 type CreateRoomResult = {
   room: Room | null;

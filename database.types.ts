@@ -177,6 +177,13 @@ export type Database = {
         }
         Returns: Json
       }
+      delete_room_and_related_data: {
+        Args: {
+          input_room_id: string
+          input_user_id: string
+        }
+        Returns: Json
+      }
     }
     Enums: {
       [_ in never]: never

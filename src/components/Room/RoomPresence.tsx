@@ -3,11 +3,13 @@
 
 import { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
-import { type Room } from "@/lib/store/roomStore";
+import { useRoom, type Room } from "@/lib/store/roomStore";
 import { useUser } from "@/lib/store/userStore";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 type PresenceState = {
   online_at: string;
@@ -25,8 +27,11 @@ type UserMetaData = {
 
 export default function RoomPresence({ room }: { room: Room }) {
   const { user } = useUser();
+  const { userRooms, setUserRooms } = useRoom();
   const supabase = createClient();
   const [activeUsers, setActiveUsers] = useState<PresenceState[]>([]);
+
+  const router = useRouter();
 
   useEffect(() => {
     if (!user) return;
@@ -54,6 +59,12 @@ export default function RoomPresence({ room }: { room: Room }) {
         const uniqueUsers = Array.from(uniqueUsersMap.values());
         setActiveUsers(uniqueUsers);
       })
+      .on("broadcast", { event: "room_deleted" }, () => {
+        const newRooms = userRooms.filter((room) => room.id);
+        setUserRooms(newRooms);
+        toast.info(`${room.name} has been deleted by the host`);
+        router.push("/lobby");
+      })
       .subscribe(async (status) => {
         if (status !== "SUBSCRIBED") {
           return;
@@ -69,7 +80,7 @@ export default function RoomPresence({ room }: { room: Room }) {
     return () => {
       channel.unsubscribe();
     };
-  }, [user, room.id, supabase]);
+  }, [user, room.id, supabase, router]);
 
   if (!user) {
     return <div className="h-3 w-1"></div>;
