@@ -17,9 +17,7 @@ import { LogOut, Megaphone, Trash } from "lucide-react";
 import { createClient } from "@/utils/supabase/client";
 import { useUser } from "@/lib/store/userStore";
 import { toast } from "sonner";
-import { PostgrestError } from "@supabase/supabase-js";
-import { useRouter } from "next/navigation";
-import RoomListItem from "./RoomListItem";
+import { useRouter, usePathname } from "next/navigation";
 
 type ClientRoomListProps = {
   initialRooms: Room[];
@@ -159,17 +157,20 @@ export default function RoomList({ initialRooms }: ClientRoomListProps) {
         return (
           <div key={room.id} className="flex items-center gap-2">
             <ContextMenu>
-              <ContextMenuTrigger className="flex-1">
+              <ContextMenuTrigger className="relative flex-1">
                 <Link
                   key={room.id}
                   href={`/lobby/${room.name}`}
                   className={cn(
                     buttonVariants({ variant: "outline" }),
-                    "w-full",
+                    "relative w-full",
                   )}
                 >
-                  {room.name}
+                  <span>{room.name}</span>
                 </Link>
+                {usePathname() === `/lobby/${room.name}` && (
+                  <div className="absolute -left-7 top-1/2 h-6 w-5 -translate-y-1/2 rounded-lg bg-neutral-300"></div>
+                )}
               </ContextMenuTrigger>
               <ContextMenuContent>
                 <ContextMenuItem onClick={() => handleLeaveRoom(room.id)}>

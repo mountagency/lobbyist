@@ -31,7 +31,7 @@ export default async function SideBar() {
 
   return (
     <div className="h-[100dvh] min-w-[18rem] p-3">
-      <div className="flex h-full flex-col justify-between rounded-lg border border-border bg-card">
+      <div className="flex h-full flex-col justify-between overflow-hidden rounded-lg border border-border bg-card">
         <div className="space-y-4 p-3">
           <div className="flex items-center justify-center px-2 py-12">
             <Link href="/lobby" className={cn("text-2xl font-medium")}>
