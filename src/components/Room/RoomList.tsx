@@ -32,6 +32,7 @@ export default function RoomList({ initialRooms }: ClientRoomListProps) {
   const { userRooms, setUserRooms, optimisticDeleteRoom } = useRoom();
   const supabase = createClient();
   const router = useRouter();
+  const pathname = usePathname();
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -168,7 +169,7 @@ export default function RoomList({ initialRooms }: ClientRoomListProps) {
                 >
                   <span>{room.name}</span>
                 </Link>
-                {usePathname() === `/lobby/${room.name}` && (
+                {pathname === `/lobby/${room.name}` && (
                   <div className="absolute -left-7 top-1/2 h-6 w-5 -translate-y-1/2 rounded-lg bg-neutral-300"></div>
                 )}
               </ContextMenuTrigger>
